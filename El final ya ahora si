@@ -1,0 +1,382 @@
+import turtle
+import random
+
+# definir funciones para poder dibujar la cuadricula
+
+def cuadrado_1(color,pen):  # dibuja los cuadrados
+    turtle.pencolor("black")
+    turtle.fillcolor(color)
+    turtle.begin_fill()
+    turtle.forward(100)
+    turtle.left(90)
+    turtle.forward(100)
+    turtle.left(90)
+    turtle.forward(100)
+    turtle.left(90)
+    turtle.forward(100)
+    turtle.left(90)
+    turtle.end_fill()  
+
+def preparacion():  # se regresa a la posicion inicial en el renglon siguiente
+    turtle.right(180)
+    turtle.forward(300)
+    turtle.left(90)
+    turtle.forward(100)
+    turtle.left(90)
+    
+#lee el archivo y lo pone en una lista
+def lee_arch():
+    with open("datos1.txt") as archivo:
+        lista=archivo.readlines() #lee todas las lineas del archivo
+    return lista
+
+#despliega los datos del archivo
+def despliega(lista):
+    for i in range(len(lista)):
+        print(lista[i])
+        
+#nos permite escribir y que ese texto se refleje en la lista    
+def escribe(lista):
+    f=open("datos1.txt","w")
+    for i in range(len(lista)):
+        f.write(lista[i])
+    f.close()
+
+# listas de colores para los diferentes niveles
+colors_1 = ["red", "green", "blue", "orange", "purple", "pink", "yellow", "cyan", "brown"]
+colors_2 = ["red", "green", "blue", "orange", "purple", "pink", "yellow", "cyan", "brown", "black", "olive", "gold"]
+colors_3 = ["red", "green", "blue", "orange", "purple", "pink", "yellow", "cyan", "brown", "black", "olive", "gold",
+            "teal", "grey", "honeydew", "tomato", "tan", "lime", "lavender"]
+            
+#abro una lista vacia para as adelante poder meter ahi la lista de colores y poder utilizarla como "[i]" al momento de elegir los colores del cuadro
+lc=[]
+
+# comentarios
+
+#da las indiciones iniciales
+comentario_inicial = """                            
+    A continuacion se te presentaran colores en una cuadricula
+    fijate en que posicion queda cada color
+    al final se te preguntara la posicion del color
+    cada acierto sumara 10 puntos
+    los colores estaran en las posiciones 
+    1  2  3
+    4  5  6
+    7  8  9
+    ya que hayas terminado de leer las instrucciones da <enter>
+
+    """
+#le da la indicacion al jugador para que memorice los colores y posteriormente de enter para comenzar a escoger
+comentario_2 = """
+                Observa las posiciones
+                cuando estes seguro de haber memorizado los colores y donde se encuentran
+                da <enter>
+                """
+#le indica al jugador como poner los colores para que no pierda puntos por un error de dedo
+aclaracion="""
+            Al introducir el color, recuerda poner solo el color en minusculas, sin espacios en los absoluto. Suerte!
+            """
+# Programa principal
+
+num = 0 #para estos dos, ponemos 0 para que tengan un valor, porque si no marca error, pero en realidad no queremos que tenga algo que afecte los numeros, por eso el 0
+puntos=0
+
+print("Quien juega?")
+jugador=str(input()) #pone su nombre y este se guarda en el archivo
+
+print("Bienvenido/a " + jugador + comentario_inicial)
+
+listo = str(input())
+
+if listo == "":  # se comienza a dibujar la cuadricula cuando den enter y pongan el nivel
+
+    print("Que nivel de memoria tienes " + jugador +"?")  # mayor nivel son mas colores
+    
+    num = int(input())
+
+    if num == 1: #si en nivel de memoria ponen 1, se lleva a cabo todo lo siguiente que este dentro del if
+        
+        nivel="1" #se va al archivo
+        
+        turtle.screensize(2000,1500) #esto lo ponemos para que el jugdor pueda mover la pantalla, ya que no se ven los colores y el cuadro si la pantalla esta muy chica
+        
+        for i in range(len(colors_1)):       #escribe la lista de colores en y cada palabra lleva su respectivo color
+            turtle.pencolor(colors_1[i])
+            turtle.write(colors_1[i],"\n",font=("Arial",20,"normal"))
+
+        for first in range(1,4):                  #dibuja el renglon
+            pen="black"
+            color = random.choice(colors_1)
+            cuadrado_1(color,pen)
+            turtle.pencolor("white") #le pone un numerito a cada cuadrado
+            turtle.write(first,font=("Arial",20,"normal"))
+            turtle.forward(100) #mueve el cursor para en frente despues de dibujar un cuadro para que no se dibuje en el mismo lugar
+            lc.append(color) #cada vez que se dibuja un cuadro, se agrega el color utilizado a la lista vacia
+ 
+        preparacion()
+
+        for second in range(4,7):
+            pen="black"
+            color = random.choice(colors_1)
+            cuadrado_1(color,pen)
+            turtle.pencolor("white")
+            turtle.write(second,font=("Arial",20,"normal"))
+            turtle.forward(100)
+            lc.append(color)
+
+        preparacion()
+
+        for third in range(7,10):
+            pen="black"
+            color = random.choice(colors_1)
+            cuadrado_1(color,pen)
+            turtle.pencolor("white")
+            turtle.write(third,font=("Arial",20,"normal"))
+            turtle.forward(100)
+            lc.append(color)
+
+        print(comentario_2)
+
+        listo = str(input())             #cuando el jugador da enter, se dibuja un cuadro negro que cubre todo lo demas 
+        if listo == "":
+            turtle.fillcolor("black")
+            turtle.begin_fill()
+            turtle.left(90)
+            turtle.forward(300)
+            turtle.left(90)
+            turtle.forward(300)
+            turtle.left(90)
+            turtle.forward(300)
+            turtle.left(90)
+            turtle.forward(300)
+            turtle.end_fill()
+
+        print("""Recuerda, el orden de las posiciones es:
+                    1  2  3
+                    4  5  6
+                    7  8  9""")
+        print(aclaracion)
+
+        for color in range(len(lc)):           #aqui es donde utilizamos la lista vacia que hicimos anteriormente
+
+            print("Color del cuadro?")
+            color_cuadro = str(input())
+
+            if color_cuadro == lc[color]: #a esto me referia con "usar la lista de colores como "[i]" "
+                print("Acertaste! Sigue asi=)")
+                if (color_cuadro == lc[color])==True: 
+                    puntos=(puntos+10) #si el jugador acierta, se le suman 10 puntos y se le muestra su puntaje actual
+                    print(str(puntos)+"/90")
+            else:
+                print("Uff, cuidado! Era " + lc[color])
+                print(str(puntos)+"/90")#si no acierta, simplemente se muestra el mensaje y la puntuacion que tenia la ultima vez que acerto
+        puntuacion=("Tu puntuacion final es:" + str(puntos) + "/90" )#formula lo que se mostrara en la pantalla como "puntuacion" con mensaje y los puntos en si
+        print("Terminaste, listo para ver tu puntuacion? Da <enter>")#mensaje que indica que ya acabo el juego y le dice que de enter para ver su puntuacion
+        ver_puntos=str(input())
+        if ver_puntos=="":    
+            print(puntuacion)
+        
+        if puntos==90 and puntos==80:     #indica los parametros de puntuacion, segun la calificacion que se obtenga, se muestra un mensaje distinto
+            print("Felicidades! Tu memoria es asombrosa!=O")
+        if puntos==70:
+            print("Excelente! Sigue intentando para mejorar tu memoria=)")
+        if puntos<=60:
+            print("Lo hiciste bien! Sigue intentando para mejorar tu memoria=)")
+        puntaje=(str(puntos)+"/90")#el que se va al archivo
+            
+    elif num == 2:
+        
+        nivel="2"
+        
+        turtle.screensize(2000,1500)
+
+        for i in range(len(colors_2)):
+            turtle.pencolor(colors_2[i])
+            turtle.write(colors_2[i],"\ n", font=("Arial",20,"normal"))
+
+        for first in range(1,4):
+            pen="black"
+            color = random.choice(colors_2)
+            cuadrado_1(color,pen)
+            turtle.pencolor("white")
+            turtle.write(first,font=("Arial",20,"normal"))
+            turtle.forward(100)
+            lc.append(color)
+
+        preparacion()
+
+        for second in range(4,7):
+            pen="black"
+            color = random.choice(colors_2)
+            cuadrado_1(color,pen)
+            turtle.pencolor("white")
+            turtle.write(second,font=("Arial",20,"normal"))
+            turtle.forward(100)
+            lc.append(color)
+            
+        preparacion()
+
+        for third in range(7,10):
+            pen="black"
+            color = random.choice(colors_2)
+            cuadrado_1(color,pen)
+            turtle.pencolor("white")
+            turtle.write(third,font=("Arial",20,"normal"))
+            turtle.forward(100)
+            lc.append(color)
+
+        print(comentario_2)
+
+        listo = str(input())
+        if listo == "":
+            color = "black"
+            turtle.color(color)
+            turtle.fillcolor(color)
+            turtle.begin_fill()
+            turtle.left(90)
+            turtle.forward(300)
+            turtle.left(90)
+            turtle.forward(300)
+            turtle.left(90)
+            turtle.forward(300)
+            turtle.left(90)
+            turtle.forward(300)
+            turtle.end_fill()
+
+        print("""Recuerda, el orden de las posiciones es:
+                1  2  3
+                4  5  6
+                7  8  9""")
+        
+        print(aclaracion)
+
+        for color in range(len(lc)):
+
+            print("Color del cuadro?")
+            color_cuadro = str(input())
+
+            if color_cuadro == lc[color]:
+                print("Acertaste! Sigue asi=)")
+                if (color_cuadro == lc[color])==True:
+                    puntos=(puntos+10)
+                    print(str(puntos)+"/90")
+            else:
+                print("Uff, cuidado! Era " + lc[color])
+                print(str(puntos)+"/90")
+        puntuacion=("Tu puntuacion final es:" + str(puntos) + "/90" )
+        print("Terminaste, listo para ver tu puntuacion? Da <enter>")
+        ver_puntos=str(input())
+        if ver_puntos=="":    
+            print(puntuacion)
+        
+        if puntos==90 and puntos==80:
+            print("Felicidades! Tu memoria es asombrosa!=O")
+        if puntos==70:
+            print("Excelente! Sigue intentando para mejorar tu memoria=)")
+        if puntos<=60:
+            print("Lo hiciste bien! Sigue intentando para mejorar tu memoria=)")
+        puntaje=(str(puntos)+"/90")
+
+    elif num == 3:
+        
+        nivel="3"
+        
+        turtle.screensize(5000,5000)
+
+        for i in range(len(colors_3)):
+            turtle.pencolor(colors_3[i])
+            turtle.write(colors_3[i],"\ n", font=("Arial",20,"normal"))
+
+        for first in range(1,4):
+            pen="black"
+            color = random.choice(colors_3)
+            cuadrado_1(color,pen)
+            turtle.pencolor("white")
+            turtle.write(first,font=("Arial",20,"normal"))
+            turtle.forward(100)
+            lc.append(color)
+
+        preparacion()
+
+        for second in range(4,7):
+            pen="black"
+            color = random.choice(colors_3)
+            cuadrado_1(color,pen)
+            turtle.pencolor("white")
+            turtle.write(second,font=("Arial",20,"normal"))
+            turtle.forward(100)
+            lc.append(color)
+
+        preparacion()
+
+        for third in range(7,10):
+            pen="black"
+            color = random.choice(colors_3)
+            cuadrado_1(color,pen)
+            turtle.pencolor("white")
+            turtle.write(third,font=("Arial",20,"normal"))
+            turtle.forward(100)
+            lc.append(color)
+
+        print(comentario_2)
+
+        listo = str(input())
+        if listo == "":
+            color = "black"
+            turtle.color(color)
+            turtle.fillcolor(color)
+            turtle.begin_fill()
+            turtle.left(90)
+            turtle.forward(300)
+            turtle.left(90)
+            turtle.forward(300)
+            turtle.left(90)
+            turtle.forward(300)
+            turtle.left(90)
+            turtle.forward(300)
+            turtle.end_fill()
+
+
+        print("""Recuerda, el orden de las posiciones es:
+                1  2  3
+                4  5  6
+                7  8  9""")
+        
+        print(aclaracion)
+
+        for color in range(len(lc)):
+
+            print("Color del cuadro?")
+            color_cuadro = str(input())
+
+            if color_cuadro == lc[color]:
+                print("Acertaste! Sigue asi=)")
+                if (color_cuadro == lc[color])==True:
+                    puntos=(puntos+10)
+                    print(str(puntos)+"/90")
+            else:
+                print("Uff, cuidado! Era " + lc[color])
+                print(str(puntos)+"/90")
+        puntuacion=("Tu puntuacion final es:" + str(puntos) + "/90" )
+        print("Terminaste, listo para ver tu puntuacion? Da <enter>")
+        ver_puntos=str(input())
+        if ver_puntos=="":    
+            print(puntuacion)
+        
+        if puntos==90 and puntos==80:
+            print("Felicidades! Tu memoria es asombrosa!=O")
+        if puntos==70:
+            print("Excelente! Sigue intentando para mejorar tu memoria=)")
+        if puntos<=60:
+            print("Lo hiciste bien! Sigue intentando para mejorar tu memoria=)")
+        puntaje=(str(puntos)+"/90")
+
+lista=lee_arch()
+print(" ")
+despliega(lista)
+print(" ")
+lista.append(jugador+" "+ nivel + " " + puntaje  + "\n")
+escribe(lista)
+
+#para que el jugador no se confunda y piense que su puntuacion no fue registrada, se le dice lo siguiente, tambien asi puede comparar su puntuacion con la de otras personas
+print("""Para ver puntuaciones pasadas y la que acabas de obtener en una lista, copia y pega <despliega(lista)> y posteriormente da <enter>""")
